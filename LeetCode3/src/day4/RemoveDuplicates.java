@@ -57,9 +57,10 @@ import java.util.Arrays;
  */
 public class RemoveDuplicates {
     public static void main(String[] args) {
-        int[] nums = {1, 1, 1, 2, 2, 3};
+//        int[] nums = {0, 0, 1, 1, 1, 1, 2, 3, 3};
+        int[] nums = {1, 2, 2};
         RemoveDuplicates removeDuplicates = new RemoveDuplicates();
-        removeDuplicates.removeDuplicates(nums);
+        removeDuplicates.removeDuplicates1(nums);
     }
 
     public int removeDuplicates(int[] nums) {
@@ -79,5 +80,40 @@ public class RemoveDuplicates {
         }
         Arrays.sort(nums);
         return nums.length - sub;
+    }
+
+    public int removeDuplicates1(int[] nums) {
+        if (nums.length <= 2)
+            return nums.length;
+        int k = 2;
+        boolean flag = true;
+        for (k = 2; k < nums.length; k++) {
+            if (nums[k - 2] == nums[k]) {
+                k = k + 1;
+                flag = false;
+                break;
+            }
+        }
+        if (flag)
+            return nums.length;
+        int i = k - 2;
+        while (k < nums.length) {
+            if (nums[i - 1] == nums[i]) {
+                //找不等于的两个
+                while (k < nums.length && nums[k] == nums[i]) {
+                    k++;
+                }
+                if (k < nums.length && i + 1 < nums.length)
+                    nums[++i] = nums[k++];
+                if (k < nums.length && i + 2 < nums.length)
+                    nums[++i] = nums[k++];
+            } else {
+                //任意找一个
+                if (i + 1 < nums.length) {
+                    nums[++i] = nums[k++];
+                }
+            }
+        }
+        return i + 1;
     }
 }
